@@ -6,14 +6,14 @@ export default class Carousel {
     this.slides = slides;
     this.elem = this.#getCarousel();
     this.#addMoveHandler();
-    this.elem.querySelector('.carousel__button').addEventListener('click', function() {
+    this.elem.querySelectorAll('.carousel__button').forEach(button => button.addEventListener('click', function() {
       let slide = slides[self.slideNumber];
       let carouselEvent = new CustomEvent('product-add', {
         bubbles: true,
         detail: slide.id
       });
       self.elem.dispatchEvent(carouselEvent);
-    })
+    }));
   }
   #getCarousel() {
     return createElement(`
