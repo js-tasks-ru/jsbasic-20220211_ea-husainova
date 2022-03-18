@@ -2,17 +2,16 @@ import createElement from '../../assets/lib/create-element.js';
 
 export default class Carousel {
   constructor(slides) {
-    let self = this;
     this.slides = slides;
     this.elem = this.#getCarousel();
     this.#addMoveHandler();
-    this.elem.querySelectorAll('.carousel__button').forEach(button => button.addEventListener('click', function() {
-      let slide = slides[self.slideNumber];
+    this.elem.querySelectorAll('.carousel__button').forEach(button => button.addEventListener('click', () => {
+      let slide = slides[this.slideNumber];
       let carouselEvent = new CustomEvent('product-add', {
         bubbles: true,
         detail: slide.id
       });
-      self.elem.dispatchEvent(carouselEvent);
+      this.elem.dispatchEvent(carouselEvent);
     }));
   }
   #getCarousel() {
@@ -49,28 +48,27 @@ export default class Carousel {
     let carouselArrowLeft = this.elem.querySelector('.carousel__arrow_left');
     let slidesLength = this.slides.length;
     let carouselInner = this.elem.querySelector('.carousel__inner');
-    let self = this;
     this.slideNumber = 0;
-    let updateUI = function() {
-      carouselInner.style.transform = 'translateX(-' + carouselInner.offsetWidth * self.slideNumber + 'px)';
-      if (self.slideNumber == 0) {
+    let updateUI = () => {
+      carouselInner.style.transform = 'translateX(-' + carouselInner.offsetWidth * this.slideNumber + 'px)';
+      if (this.slideNumber == 0) {
         carouselArrowLeft.style.display = 'none';
       } else {
         carouselArrowLeft.style.display = '';
       }
-      if (self.slideNumber == slidesLength - 1) {
+      if (this.slideNumber == slidesLength - 1) {
         carouselArrowRight.style.display = 'none';
       } else {
         carouselArrowRight.style.display = '';
       }
     }
     updateUI();
-    carouselArrowRight.addEventListener('click', function() {
-      self.slideNumber += 1;
+    carouselArrowRight.addEventListener('click', () => {
+      this.slideNumber += 1;
       updateUI();
     });
-    carouselArrowLeft.addEventListener('click', function() {
-      self.slideNumber -= 1;
+    carouselArrowLeft.addEventListener('click', () => {
+      this.slideNumber -= 1;
       updateUI();
     });
   }
