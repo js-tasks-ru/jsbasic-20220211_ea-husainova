@@ -6,6 +6,12 @@ export default class Modal {
     this.elem.querySelector('.modal__close').addEventListener('click', () => {
       this.close();
     })
+    this.escHandler = (event) => {
+      if (event.code !== 'Escape') {
+        return;
+      }
+      this.close();
+    };
   }
   #modalWindow() {
     return createElement(`
@@ -27,12 +33,6 @@ export default class Modal {
     let body = document.querySelector('body');
     body.appendChild(this.elem);
     body.classList.add('is-modal-open');
-    this.escHandler = (event) => {
-      if (event.code !== 'Escape') {
-        return;
-      }
-      this.close();
-    };
     document.addEventListener('keydown', this.escHandler);
   }
   setTitle(title) {
