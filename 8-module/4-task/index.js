@@ -104,6 +104,9 @@ export default class Cart {
     modalWindow.setBody(modalBody);
     modalWindow.elem.addEventListener('click', (event) => {
       let button = event.target.closest('.cart-counter__button');
+      if (!button) {
+        return;
+      }
       if (button.classList.contains('cart-counter__button_minus')) {
         let productId = button.closest('.cart-product').dataset.productId;
         this.updateProductCount(productId, -1);
@@ -124,7 +127,7 @@ export default class Cart {
       return;
     }
     let productId = cartItem.product.id;
-    let modalBody = document.querySelector('.modal__body');
+    let modalBody = this.modalWindow.elem.querySelector('.modal__body');
     let cartProduct = modalBody.querySelector(`[data-product-id="${productId}"]`);
     let productCount = cartProduct.querySelector('.cart-counter__count');
     let productPrice = cartProduct.querySelector('.cart-product__price');
