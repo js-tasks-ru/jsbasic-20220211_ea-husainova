@@ -4,11 +4,11 @@ export default class StepSlider {
   constructor({ steps, value = 0 }) {
     this.steps = steps;
     this.isMoving = false;
-    this.stepNum = 0;
+    this.stepNum = value;
     this.sliderPos = 0;
     this.elem = this.#stepSlider();
     this.#addSliderHandlers();
-    this.#updateSliderСontinuous();
+    this.#updateSliderDiscrete();
   }
   #stepSlider() {
     return createElement(`
@@ -68,19 +68,22 @@ export default class StepSlider {
     }
   }
   #updateSliderDiscrete() {
-    this.sliderPos = this.stepNum / (this.steps - 1) * this.elem.offsetWidth;
-    this.#updateSliderСontinuous();
+    let percent = this.stepNum / (this.steps - 1) * 100;
     let sliderEvent = new CustomEvent('slider-change', {
       bubbles: true,
       detail: this.stepNum
     });
     this.elem.dispatchEvent(sliderEvent);
+    this.#updateSliderUI(percent);
   }
   #updateSliderСontinuous() {
+    let percent = this.elem.offsetWidth !== 0 ? this.sliderPos / this.elem.offsetWidth * 100 : 0;
+    this.#updateSliderUI(percent);
+  }
+  #updateSliderUI(percent) {
     this.elem.querySelectorAll('.slider__step-active').forEach(item => item.classList.remove('slider__step-active'));
     this.elem.querySelector('.slider__value').innerHTML = this.stepNum;
     this.elem.querySelector('.slider__steps').children[this.stepNum].classList.add('slider__step-active');
-    let percent = this.elem.offsetWidth !== 0 ? this.sliderPos / this.elem.offsetWidth * 100 : 0;
     this.elem.querySelector('.slider__thumb').style.left = `${percent}%`;
     this.elem.querySelector('.slider__progress').style.width = `${percent}%`;
   }
